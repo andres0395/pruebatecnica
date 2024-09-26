@@ -1,0 +1,7 @@
+.form-container {
+  max-height: 200px; /* Limita la altura máxima del formulario */
+  overflow-y: auto;  /* Añade un scroll vertical si el contenido excede la altura */
+  padding: 10px;     /* Añade un poco de espacio interno para mejorar la apariencia */
+  border: 1px solid #ccc; /* Opcional: para visualizar mejor los límites del formulario */
+  background-color: #f9f9f9; /* Fondo claro para una mejor legibilidad */
+}
