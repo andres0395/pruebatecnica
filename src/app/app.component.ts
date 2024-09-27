@@ -3,10 +3,14 @@ import { DatabaseService } from './services/database.service';
 import { Tasks } from './interfaces/task.interface';
 import { initFlowbite } from 'flowbite';
 import { StoreService } from './services/store.service';
+import { ViewtaskComponent } from './components/viewtask/viewtask.component';
+import { FormtaskComponent } from './components/formtask/formtask.component';
 @Component({
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  imports:[ViewtaskComponent,FormtaskComponent]
 })
 export class AppComponent implements OnInit {
   data!:Signal<Tasks[]>;
@@ -17,7 +21,7 @@ export class AppComponent implements OnInit {
     initFlowbite();
     const res:Tasks[] = await this.databaseService.getData();
     res.forEach((task:Tasks)=>{
-      task.personsAsociate = [];
+      task.personsAsociate = [{name:'jsonplaceholder',age:20,skils:['javascript','typescript']}];
       task.dateLimit = this.today;
     });
     this.store.setData(res.slice(0,10));
