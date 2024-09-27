@@ -3,6 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Tasks } from 'src/app/interfaces/task.interface';
 import { StoreService } from 'src/app/services/store.service';
+import Swal from 'sweetalert2';
 
 @Component({
   standalone: true,
@@ -14,8 +15,6 @@ import { StoreService } from 'src/app/services/store.service';
 export class FormtaskComponent implements OnInit {
   private store = inject(StoreService);
   private formBuilder = inject(FormBuilder);
-  viewNotification = true;
-  viewNotificationError = true;
    formTask = this.formBuilder.nonNullable.group({
     title:['',Validators.required],
     dateLimit:['',Validators.required],
@@ -61,7 +60,19 @@ export class FormtaskComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.formTask.valid) {
+    const nameCount = this.formTask.value.personsAsociate?.reduce((acc:string[], obj:any) => {
+      const res = this.formTask.value.personsAsociate?.filter((e:any)=>e.name.toUpperCase() == obj.name.toUpperCase());
+        if(!!res && res.length>1)acc.push(obj.name);
+      return acc;
+    }, [] );
+    let nameCount1 = [... new Set(nameCount)]
+    if(!!nameCount1.length){
+      Swal.fire({
+        title:'Tiene seleccionadas a la misma persona varias veces verifique y vuelva a guardar',
+        icon:'error'
+      });
+    }
+    else if (this.formTask.valid ) {
       const task: Tasks = {
         title: this.formTask.getRawValue().title,
         dateLimit: this.formTask.getRawValue().dateLimit,
@@ -69,16 +80,16 @@ export class FormtaskComponent implements OnInit {
         personsAsociate: this.formTask.getRawValue().personsAsociate
       };
       this.store.updateData(task);
-      this.showMessage();
       this.formTask.reset();
+      Swal.fire({
+        icon:'success',
+        title:'Tarea Creada Correctamente'
+      })
     } else {
-      this.showMessageError();
+      Swal.fire({
+        title:'Tiene campos vacios o valores invalidos',
+        icon:'error'
+      });
     }
-  }
-  showMessage(){
-    this.viewNotification = !this.viewNotification;
-  }
-  showMessageError(){
-    this.viewNotificationError = !this.viewNotificationError;
   }
 }

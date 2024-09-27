@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     initFlowbite();
     const res:Tasks[] = await this.databaseService.getData();
     res.forEach((task:Tasks)=>{
-      task.personsAsociate = [{name:'jsonplaceholder',age:20,skils:['javascript','typescript']}];
+      task.personsAsociate = [{name:'jsonplaceholder',age:20,skils:['javascript','typescript']},{name:'jsonplaceholder',age:20,skils:['javascript','typescript']},{name:'jsonplaceholder',age:20,skils:['javascript','typescript']}];
       task.dateLimit = this.today;
     });
     this.store.setData(res.slice(0,10));
