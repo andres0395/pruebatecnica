@@ -24,4 +24,8 @@ export class StoreService {
     this.dataFilter.set(this.data());
     return this.dataFilter;
   }
+  updateData(dataTasks:Tasks ){
+    this.data().unshift(dataTasks);
+    this.getData();
+  }
 }
